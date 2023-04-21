@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+      <!-- Hero image -->
+      
+      {% if not "listem" in request.path %}
+
+        
+      
+        
+      <div class="hero-image">
+
+        <div class="hero-text">
+            <h1>Sınırsız film, dizi ve çok daha fazlası.</h1>
+            <h4>İstediğiniz yerde izleyin. İstediğiniz zaman iptal edin.</h4>
+            <p>İzlemeye hazır mısınız? Üyelik oluşturmak veya üyeliğinze erişmek için e-posta adresinizi girin</p>
+
+            <button class="btn btn-secondary btn-lg mt-3">Oynat</button>
+            <button class="btn btn-secondary btn-lg mt-3">Daha Fazla Bilgi</button>
+        </div>
+        
+
+      </div>
+      {% else %}
+      <div class="hero-image">
+
+        <div class="hero-text">
+            <h1>Listenize ekledikleriniz</h1>
+        </div>
+        
+
+      </div>
+
+      {% endif %}
+
+      
+      {% if not "film" in request.path and not "dizi" in request.path and not "gundem" in request.path and not "listem" in request.path %}
+    <div class="container ">
+        <div class="row mt-5">
+
+          <h3 class="text-light">Netflix'te Popüler</h3>
+          
+          {% for film in films %}
+          
+              
+              {% for tag  in film.tag.all  %}
+              
+                  {% if tag.slug == "populer" %}
+                  
+                      <div class="col-md-2 col-4 mt-1">
+                          <a href="video.html">
+                              <img  src="{{ film.image.url }}" class="w-100" alt="">
+                              <form  method="POST">
+                                  {% csrf_token %}
+                                  <input name="film-id" type="hidden" value="{{ film.id }}">
+                                  <button class="btn  btn-outline-success w-100" type="submit" name="submit" value="btn-film">EKLE</button>
+                              </form>
+                          </a>
+                      </div>
+                  {% endif %}
+                  
+              {% endfor %}
+                         
+              
+          {% endfor %}
+              
+        
+              
+
+        </div>
+
+        <div class="row mt-5">
+            <h3 class="text-light"> Gündemdekiler</h3>
+
+            {% for film in films %}
+          
+              
+            {% for tag  in film.tag.all  %}
+            
+                {% if tag.slug == "gundem" %}
+                
+                <div class="col-md-2 col-4 mt-1">
+                    <a href="video.html">
+                        <img  src="{{ film.image.url }}" class="w-100" alt="">
+                        <form  method="POST">
+                            {% csrf_token %}
+                            <input name="film-id" type="hidden" value="{{ film.id }}">
+                            <button class="btn  btn-outline-success w-100 " type="submit" name="submit" value="btn-film">EKLE</button>
+                        </form>
+                    </a>
+                </div>
+                {% endif %}
+                
+            {% endfor %}
+                       
+            
+        {% endfor %}
+
+        </div>
+    </div>
+
+
+
+        {% elif "film" in request.path %}
+        <div class="container">
+            <div class="row mt-5">
+    
+              <h3 class="text-light">Filmler</h3>
+              
+              {% for film in films %}                      
+                          <div class="col-md-2 col-4 mt-1">
+                              <a href="video.html">
+                                  <img src="{{ film.image.url }}" class="w-100" alt="">
+                                  <form action="" method="POST">
+                                      {% csrf_token %}
+                                      <input name="film-id" type="hidden" value="{{ film.id }}">
+                                      <button class="btn  btn-outline-success w-100" type="submit" name="submit" value="btn-film">EKLE</button>
+                                  </form>
+                              </a>
+                          </div>
+            
+              {% endfor %}
+                  
+            
+                  
+    
+            </div>
+    
+          
+        </div>
+        {% elif "dizi" in request.path %}
+        <div class="container">
+            <div class="row mt-5">
+    
+              <h3 class="text-light">Diziler</h3>
+              
+              {% for film in films %}
+              
+    
+                      
+                          <div class="col-md-2 col-4 mt-1">
+                              <a href="video.html">
+                                  <img src="{{ film.image.url }}" class="w-100" alt="">
+                                  <form method="POST">
+                                      {% csrf_token %}
+                                      <input name="film-id" type="hidden" value="{{ film.id }}">
+                                      <button class="btn  btn-outline-success w-100" type="submit" name="submit" value="btn-film">EKLE</button>
+                                  </form>
+                              </a>
+                          </div>
+                  
+                             
+                  
+              {% endfor %}
+                  
+            
+                  
+    
+            </div>
+    
+          
+        </div>
+        {% elif  "listem" in request.path %}
+          <div class="container">
+            <div class="row mt-5">
+    
+              <h3 class="text-light">Listem</h3>
+              
+              {% for film in films %}
+                      
+                          <div class="col-md-2 col-4">
+                              <a href="video.html">
+                                  <img src="{{ film.image.url }}" class="w-100" alt="">
+                                  <form action="{% url 'netflixPage' profil.id 'listem' %}" method="POST">
+                                      {% csrf_token %}
+                                      <input name="film-id" type="hidden" value="{{ film.id }}">
+                                      <button class="btn  btn-outline-warning w-100" type="submit" name="submit" value="btn-cikar">Çıkar</button>
+                                  </form>
+                              </a>
+                          </div>
+                             
+                  
+              {% endfor %}
+                  
+            
+                  
+    
+            </div>
+    
+          
+        </div>
+
+        {% else %}
+        <div class="container">
+         
+            <div class="row mt-5">
+                <h3 class="text-light"> Gündemdekiler</h3>
+    
+                {% for film in films %}
+              
+                  
+                {% for tag  in film.tag.all  %}
+                
+                    {% if tag.slug == "gundem" %}
+                    
+                        <div class="col-md-2 col-4 mt-1">
+                            <a href="video.html">
+                              <img src="{{ film.image.url }}" class="w-100" alt="">
+                              <input type="hidden" value="{{ film.id }}">
+                              <form method="POST">
+                                {% csrf_token %}
+                                  <input type="hidden" value="{{ film.id }}">
+                                  <button class="btn  btn-outline-success w-100" type="submit" name="submit" value="btn-film">EKLE</button>
+                               </form>
+    
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                {% endfor %}
+                           
+                
+            {% endfor %}
+    
+            </div>
+        </div>
+        
+      {% endif %}
+
+        
+      
+
+{% endblock body %}
+  

@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css %}
+<style>
+    body, html {
+        color: black;
+        background-color: beige;
+    }
+    a {
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .container {
+        margin-top: 100px;
+    }
+    .accordion, .panel {
+        background-color: rgba(34, 34, 34, 0);
+        color: black;
+    }
+</style>
+{% endblock css %}
+    
+
+{% block body %}
+
+{% for i in messages %}
+    {% if i.tags == "success" %}
+        <div class="toast align-items-center text-bg-success border-0 show alert-animate" role="alert" aria-live="assertive"
+            aria-atomic="true" style="position: fixed; right: 50px; bottom: 50px;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ i }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+    {% if i.tags == "warning" %}
+        <div class="toast align-items-center text-bg-danger border-0 show alert-animate" role="alert" aria-live="assertive"
+            aria-atomic="true" style="position: fixed; right: 50px; bottom: 50px;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ i }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+    
+
+    
+        
+        
+
+    <!-- Hesap -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <div class="row">
+                    <h1>Hesap</h1>
+                    <hr>
+                    <div class="col">
+                        <h4>Üyelik ve Ödemeler</h4>
+                        <button>Üyeliği iptal et</button>
+                    </div>
+                    <div class="col">
+                        <strong>{{ request.user.email }}</strong>
+                        <p>Parola: {{ userinfo.password|first }}********{{ userinfo.password|slice:'-1:' }}</p>
+                        <p>tel: 0{{ userinfo.tel }}</p>
+                    </div>
+                    <div class="col">
+                        <!-- email change -->
+                        <div>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modalemail">Email değiştir</a> <br>
+                            <!-- Button trigger modal -->
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalemail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Email Değiştir</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST">
+                                            {% csrf_token %}
+    
+                                            <div class="modal-body">
+                                                <div>
+                                                    <label for="email" class="form-label">Yeni Email</label>
+                                                    <input type="email" name="new-email" id="email" class="form-control">
+                                                </div>
+                                                <div>
+                                                    <label for="email" class="form-label">Şifreyi Giriniz</label>
+                                                    <input type="password" name="password" id="password" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="submit" value="btn-email" class="btn btn-primary">Email Kaydet</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Çık</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- password change -->
+                        <div> 
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modalpassword">Şifreyi değiştir</a> <br>
+                            <!-- Button trigger modal -->
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalpassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Şifreyi değiştir</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST">
+                                            {% csrf_token %}
+                        
+                                            <div class="modal-body">
+                                                <div>
+                                                    <label for="password1" class="form-label">Yeni Şifre</label>
+                                                    <input type="password" name="new-password" id="password1" class="form-control">
+                                                </div>
+                                                <div>
+                                                    <label for="password2" class="form-label">Şimdiki Şifreyi Giriniz</label>
+                                                    <input type="password" name="password" id="password2" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="submit" value="btn-password" class="btn btn-primary">Şifreyi
+                                                    Kaydet</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Çık</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <!-- tel change -->
+                        <div>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#modaltel">Telefon numarasını değiştir</a> <br>
+                            <!-- Button trigger modal -->
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="modaltel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Telefon numarasını değiştir</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST">
+                                            {% csrf_token %}
+                        
+                                            <div class="modal-body">
+                                                <div>
+                                                    <label for="tel" class="form-label">Yeni Telefon numarası</label>
+                                                    <input type="tel" name="new-tel" id="tel" class="form-control">
+                                                </div>
+                                                <div>
+                                                    <label for="password3" class="form-label">Şimdiki Şifreyi Giriniz</label>
+                                                    <input type="password" name="password" id="password3" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="submit" value="btn-tel" class="btn btn-primary">Teli
+                                                    Kaydet</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Çık</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <hr>
+                    <div class="col">
+                        <h4>Ayarlar</h4>
+                    </div>
+                    
+                    <div class="col">
+                        <a href="">18+ İçerik</a> <br>
+                        <a href="">Teste katılın</a> <br>
+                        <a href="">İçerik indirilen cihazları yönet</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <hr>
+                    <div class="col">
+                        <h4>Profil ve ebeveyn kontrolleri</h4>
+                    </div>
+
+                    <div class="col">
+                        <button class="accordion"><img src="{% static 'img/smile-profil.png' %}" alt=""> Berkay </button>
+                        <div class="panel">
+                            <p>
+                                <strong>Dil</strong> <br>
+                                <a href="" class="text-end">Değiştir</a>
+                            </p>
+                            <hr>
+                            <p>
+                                <strong>İzleme Kısıtlamaları</strong> <br>
+                                <a href="" class="text-end">Değiştir</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    
+{% endblock body %}
